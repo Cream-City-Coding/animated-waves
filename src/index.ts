@@ -17,7 +17,8 @@ class AnimatedWaves extends HTMLElement {
       'wave-height',
       'content-padding',
       'content-background-color',
-      'responsive'
+      'responsive',
+      'responsive-factor'
     ];
   }
 
@@ -77,7 +78,11 @@ class AnimatedWaves extends HTMLElement {
   }
 
   get responsive() {
-    return this.getAttribute('responsive') !== 'false';
+    return this.getAttribute('responsive') !== 'false'; // Default to true unless explicitly set to false
+  }
+
+  get responsiveFactor() {
+    return parseFloat(this.getAttribute('responsive-factor') || '1'); // Default to 1 (normal scaling)
   }
 
   getResponsiveWaveHeight() {
@@ -88,11 +93,17 @@ class AnimatedWaves extends HTMLElement {
     // Parse the base wave height to get a numeric value
     const baseHeight = parseFloat(this.waveHeight);
     const unit = this.waveHeight.replace(/[0-9.]/g, '');
+    const factor = this.responsiveFactor;
+    
+    // Calculate responsive heights with the factor
+    // Factor 1.0 = normal scaling, 0.5 = more aggressive, 2.0 = less aggressive
+    const mobileScale = Math.max(0.7 / factor, 0.3); // Higher factor = less scaling down
+    const tabletScale = Math.max(0.85 / factor, 0.5); // Higher factor = less scaling down
     
     return {
       base: this.waveHeight,
-      mobile: `${Math.max(baseHeight * 0.6, 40)}${unit}`, // 60% of base, minimum 40px
-      tablet: `${Math.max(baseHeight * 0.8, 60)}${unit}`, // 80% of base, minimum 60px
+      mobile: `${Math.max(baseHeight * mobileScale, 100)}${unit}`,
+      tablet: `${Math.max(baseHeight * tabletScale, 120)}${unit}`,
       desktop: this.waveHeight
     };
   }
@@ -242,6 +253,7 @@ class AnimatedWaves extends HTMLElement {
           height: ${typeof responsiveHeights === 'string' ? responsiveHeights : responsiveHeights.desktop};
           overflow: hidden;
           flex-shrink: 0;
+          transition: height 0.3s ease;
         }
 
         .content-section {

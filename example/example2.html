@@ -361,6 +361,7 @@
         wave-count="5"
         opacity-range="0.3,0.8"
         animation-style="gentle"
+        responsive-factor="1.5"
         style="position: absolute; bottom: 0; left: 0; right: 0;"
       />
     </section>
@@ -507,6 +508,38 @@
 &lt;/<span class="code-tag">animated-waves</span>&gt;</pre>
                     </div>
                 </div>
+
+                <!-- Responsive Factor Example -->
+                <div class="example-card">
+                    <div class="example-header">
+                        <h3 class="example-title">Responsive Factor</h3>
+                        <p class="example-description">Control how aggressively waves scale down on smaller screens</p>
+                    </div>
+                    <div class="example-preview">
+                        <animated-waves 
+                            position="top" 
+                            wave-color="rgba(34, 197, 94, 0.6)" 
+                            wave-height="140px"
+                            responsive-factor="0.5"
+                            speed="0.7">
+                        </animated-waves>
+                        <div style="background: linear-gradient(135deg, #10b981, #059669); height: 100px; display: flex; align-items: center; justify-content: center; color: white;">
+                            <div style="text-align: center;">
+                                <h3 style="margin: 0 0 0.5rem 0; font-size: 1.25rem;">More Aggressive Scaling</h3>
+                                <p style="margin: 0; opacity: 0.9;">responsive-factor="0.5"</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="example-code">
+<pre>&lt;<span class="code-tag">animated-waves</span> 
+    <span class="code-attr">position</span>=<span class="code-value">"top"</span> 
+    <span class="code-attr">wave-color</span>=<span class="code-value">"rgba(34, 197, 94, 0.6)"</span> 
+    <span class="code-attr">wave-height</span>=<span class="code-value">"140px"</span>
+    <span class="code-attr">responsive-factor</span>=<span class="code-value">"0.5"</span>
+    <span class="code-attr">speed</span>=<span class="code-value">"0.7"</span>&gt;
+&lt;/<span class="code-tag">animated-waves</span>&gt;</pre>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -593,6 +626,18 @@
                         <td>"smooth"</td>
                         <td class="property-description">Animation easing: "smooth", "linear", "ease-in-out", "bouncy", "gentle"</td>
                     </tr>
+                    <tr>
+                        <td><span class="property-name">responsive</span></td>
+                        <td>boolean</td>
+                        <td>true</td>
+                        <td class="property-description">Enable responsive wave heights for different screen sizes</td>
+                    </tr>
+                    <tr>
+                        <td><span class="property-name">responsive-factor</span></td>
+                        <td>number</td>
+                        <td>1</td>
+                        <td class="property-description">Controls how aggressively waves scale down (0.5 = more aggressive, 2.0 = less aggressive)</td>
+                    </tr>
                 </tbody>
             </table>
         </section>
@@ -606,6 +651,6 @@
         </div>
     </footer>
 
-    <script src="https://creamcitycoding.com/cdn/aw.js"></script>
+    <script src="../dist/animated-waves.js"></script>
 </body>
 </html>
