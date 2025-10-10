@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Waves Component Examples</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .example {
+            margin: 50px 0;
+            position: relative;
+        }
+        
+        .content {
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        
+        .overlay-example {
+            position: relative;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .overlay-waves {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            pointer-events: none;
+        }
+
+        .card-content {
+            text-align: center;
+            color: white;
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+
+        .frame-example {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 20px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Animated Waves Component</h1>
+        <p>A reusable web component for beautiful animated waves with customizable properties.</p>
+    </div>
+
+    <!-- Basic Usage -->
+    <div class="example">
+        <h2>Basic Usage (Default Settings)</h2>
+        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 10px 0;"><code>&lt;animated-waves position="both" speed="0.5" height="10rem"&gt;&lt;/animated-waves&gt;</code></pre>
+        </div>
+        <animated-waves position="both" speed="0.5" height="10rem"></animated-waves>
+    </div>
+
+    <!-- NEW: Top and Bottom Waves with Content -->
+    <div class="example">
+        <h2>Top & Bottom Waves with Content</h2>
+        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 10px 0;"><code>&lt;animated-waves 
+    position="both" 
+    wave-color="rgba(255,255,255,0.4)" 
+    wave-height="80px"
+    content-padding="40px"
+    content-background-color="rgba(255,255,255,0.675)"&gt;
+    &lt;div class="card-content"&gt;
+        &lt;h3&gt;Welcome to Our Website&lt;/h3&gt;
+        &lt;p&gt;This content is beautifully framed by animated waves above and below!&lt;/p&gt;
+        &lt;p&gt;The content area now has a matching background color.&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/animated-waves&gt;</code></pre>
+        </div>
+        <div class="frame-example">
+            <animated-waves 
+                position="both" 
+                wave-color="rgba(255,255,255,0.4)" 
+                wave-height="80px"
+                content-padding="40px"
+                content-background-color="rgba(255,255,255,0.675)">
+                <div class="card-content">
+                    <h3>Welcome to Our Website</h3>
+                    <p>This content is beautifully framed by animated waves above and below!</p>
+                    <p>The content area now has a matching background color.</p>
+                </div>
+            </animated-waves>
+        </div>
+    </div>
+
+    <!-- NEW: Bottom Only Waves -->
+    <div class="example">
+        <h2>Bottom Waves Only</h2>
+        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 10px 0;"><code>&lt;animated-waves 
+    position="bottom" 
+    wave-color="#e74c3c" 
+    wave-height="120px"
+    speed="0.7"&gt;
+&lt;/animated-waves&gt;</code></pre>
+        </div>
+        <animated-waves 
+            position="bottom" 
+            wave-color="#e74c3c" 
+            wave-height="120px"
+            speed="0.7">
+        </animated-waves>
+    </div>
+
+    <!-- NEW: Complex Example with Custom Styling -->
+    <div class="example">
+        <h2>Complex Framed Content</h2>
+        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 10px 0;"><code>&lt;animated-waves 
+    position="both" 
+    wave-color="rgba(255,255,255,0.3)" 
+    wave-count="5"
+    wave-height="100px"
+    speed=".65"
+    opacity-range="0.1,0.6"
+    animation-style="gentle"
+    content-padding="60px 40px"
+    content-background-color="rgba(255,255,255,0.425)"&gt;
+&lt;/animated-waves&gt;</code></pre>
+        </div>
+        <div style="background: linear-gradient(45deg, #2ecc71, #27ae60); margin: 20px; border-radius: 15px; overflow: hidden;">
+            <animated-waves 
+                position="both" 
+                wave-color="rgba(255,255,255,0.3)" 
+                wave-count="5"
+                wave-height="100px"
+                speed=".65"
+                opacity-range="0.1,0.6"
+                animation-style="gentle"
+                content-padding="60px 40px"
+                content-background-color="rgba(255,255,255,0.425)">
+            </animated-waves>
+        </div>
+    </div>
+
+    <!-- Custom Colors -->
+    <div class="example">
+        <h2>Custom Colors</h2>
+        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 10px 0;"><code>&lt;animated-waves 
+    wave-color="#e74c3c" 
+    background-color="rgba(52, 152, 219, 0.2)"&gt;
+&lt;/animated-waves&gt;</code></pre>
+        </div>
+        <animated-waves 
+            wave-color="#e74c3c" 
+            background-color="rgba(52, 152, 219, 0.2)">
+        </animated-waves>
+    </div>
+
+    <!-- Different Heights -->
+    <div class="example">
+        <h2>Custom Height</h2>
+        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 10px 0;"><code>&lt;animated-waves 
+    height="200px" 
+    wave-color="#9b59b6" 
+    opacity-range="0.2,0.8"&gt;
+&lt;/animated-waves&gt;</code></pre>
+        </div>
+        <animated-waves 
+            height="200px" 
+            wave-color="#9b59b6" 
+            opacity-range="0.2,0.8">
+        </animated-waves>
+    </div>
+
+    <!-- Speed Variations -->
+    <div class="example">
+        <h2>Fast Animation</h2>
+        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 10px 0;"><code>&lt;animated-waves 
+    speed=".1" 
+    wave-color="#f39c12" 
+    animation-style="bouncy"&gt;
+&lt;/animated-waves&gt;</code></pre>
+        </div>
+        <animated-waves 
+            speed=".1" 
+            wave-color="#f39c12" 
+            animation-style="bouncy">
+        </animated-waves>
+    </div>
+
+    <!-- More Waves -->
+    <div class="example">
+        <h2>More Waves</h2>
+        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 10px 0;"><code>&lt;animated-waves 
+    wave-count="6" 
+    wave-color="#2ecc71" 
+    opacity-range="0.1,0.7" 
+    speed="0.5"&gt;
+&lt;/animated-waves&gt;</code></pre>
+        </div>
+        <animated-waves 
+            wave-count="6" 
+            wave-color="#2ecc71" 
+            opacity-range="0.1,0.7" 
+            speed="0.5">
+        </animated-waves>
+    </div>
+
+    <!-- Overlay Example -->
+    <div class="example">
+        <h2>Overlay on Content</h2>
+        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 10px 0;"><code>&lt;div class="overlay-example"&gt;
+    &lt;h2&gt;Overlay on Content&lt;/h2&gt;
+    &lt;p&gt;This demonstrates waves as an overlay on top of other content.&lt;/p&gt;
+    
+    &lt;animated-waves 
+        class="overlay-waves"
+        wave-color="rgba(255, 255, 255, 0.3)" 
+        wave-count="3" 
+        height="120px" 
+        speed="0.8"
+        animation-style="gentle"&gt;
+    &lt;/animated-waves&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+        <div class="overlay-example">
+            <p>This demonstrates waves as an overlay on top of other content.</p>
+            <p>The waves flow smoothly over the background while keeping the content readable.</p>
+            
+            <animated-waves 
+                class="overlay-waves"
+                wave-color="rgba(255, 255, 255, 0.3)" 
+                wave-count="3" 
+                height="120px" 
+                speed="0.8"
+                animation-style="gentle">
+            </animated-waves>
+        </div>
+    </div>
+
+    <!-- NEW: Content with Different Background -->
+    <div class="example">
+        <h2>Custom Content Background</h2>
+        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 10px 0;"><code>&lt;animated-waves 
+    position="both" 
+    wave-color="#e74c3c" 
+    wave-height="100px"
+    content-padding="50px"
+    content-background-color="#e74c3c"&gt;
+    &lt;div style="text-align: center; color: white;"&gt;
+        &lt;h3 style="margin-top: 0;"&gt;Sunset Vibes&lt;/h3&gt;
+        &lt;p&gt;The content background automatically matches the wave color by default, or you can customize it!&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/animated-waves&gt;</code></pre>
+        </div>
+        <animated-waves 
+            position="both" 
+            wave-color="#e74c3c" 
+            wave-height="100px"
+            content-padding="50px"
+            content-background-color="#e74c3c">
+            <div style="text-align: center; color: white;">
+                <h3 style="margin-top: 0;">Sunset Vibes</h3>
+                <p>The content background automatically matches the wave color by default, or you can customize it!</p>
+            </div>
+        </animated-waves>
+    </div>
+
+    <div class="content">
+        <h2>📋 Available Properties</h2>
+        <ul>
+            <li><strong>position</strong>: 'top' (default), 'bottom', or 'both' - Controls wave placement</li>
+            <li><strong>wave-height</strong>: Height of each wave section (default: 100px) - Only for 'both' position</li>
+            <li><strong>content-padding</strong>: Padding around content area (default: 20px) - Only for 'both' position</li>
+            <li><strong>content-background-color</strong>: Background color of content area (default: matches wave-color) - Only for 'both' position</li>
+            <li><strong>wave-color</strong>: Color of the waves (default: #1A237E)</li>
+            <li><strong>background-color</strong>: Background color (default: transparent)</li>
+            <li><strong>height</strong>: Height of the wave container (default: 15vh) - For 'top'/'bottom' only</li>
+            <li><strong>speed</strong>: Animation speed multiplier (default: 1, higher = faster)</li>
+            <li><strong>opacity-range</strong>: Min,max opacity for waves (default: 0.3,0.9)</li>
+            <li><strong>wave-count</strong>: Number of wave layers (default: 4)</li>
+            <li><strong>animation-style</strong>: smooth, linear, ease-in-out, bouncy, gentle (default: smooth)</li>
+        </ul>
+        
+        <h2>🚀 Getting Started</h2>
+        <p>Include the animated-waves component in your HTML using the CDN:</p>
+        
+        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <h3 style="margin-top: 0; color: #495057;">📦 CDN Import</h3>
+            <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 10px 0;"><code>&lt;script src="https://creamcitycoding.com/cdn/aw.js"&gt;&lt;/script&gt;</code></pre>
+        </div>
+
+        <h2>💡 Usage Examples</h2>
+        
+        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <h3 style="margin-top: 0; color: #495057;">Basic Usage</h3>
+            <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 10px 0;"><code>&lt;!-- Basic top waves --&gt;
+&lt;animated-waves&gt;&lt;/animated-waves&gt;
+
+&lt;!-- Bottom waves only --&gt;
+&lt;animated-waves position="bottom"&gt;&lt;/animated-waves&gt;</code></pre>
+        </div>
+
+        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <h3 style="margin-top: 0; color: #495057;">Content with Waves</h3>
+            <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 10px 0;"><code>&lt;!-- Top and bottom with content --&gt;
+&lt;animated-waves 
+    position="both" 
+    wave-color="#1A237E" 
+    wave-height="120px"
+    content-padding="40px"&gt;
+    &lt;h2&gt;Your Content Here&lt;/h2&gt;
+    &lt;p&gt;This content is framed by waves!&lt;/p&gt;
+&lt;/animated-waves&gt;</code></pre>
+        </div>
+
+        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <h3 style="margin-top: 0; color: #495057;">Advanced Customization</h3>
+            <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 10px 0;"><code>&lt;!-- Fully customized --&gt;
+&lt;animated-waves 
+    position="both"
+    wave-color="rgba(255,255,255,0.4)" 
+    wave-height="100px" 
+    speed="2" 
+    wave-count="5"
+    opacity-range="0.2,0.8"
+    animation-style="gentle"
+    content-padding="60px"
+    content-background-color="#1A237E"&gt;
+    &lt;div&gt;Beautiful framed content&lt;/div&gt;
+&lt;/animated-waves&gt;</code></pre>
+        </div>
+
+        <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin: 20px 0;">
+            <h3 style="margin-top: 0; color: #495057;">Complete HTML Example</h3>
+            <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 6px; overflow-x: auto; margin: 10px 0;"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My Animated Waves Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;animated-waves 
+        position="both" 
+        wave-color="#667eea" 
+        wave-height="100px"
+        content-padding="40px"&gt;
+        &lt;h1&gt;Welcome to My Site&lt;/h1&gt;
+        &lt;p&gt;This content is beautifully framed by animated waves!&lt;/p&gt;
+    &lt;/animated-waves&gt;
+    
+    &lt;script src="https://creamcitycoding.com/cdn/aw.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </div>
+    </div>
+
+    <script src="../dist/animated-waves.js"></script>
+</body>
+</html> 

@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Waves</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-text: #1a1a1a;
+            --color-text-light: #6b7280;
+            --color-text-muted: #9ca3af;
+            --color-border: #e5e7eb;
+            --color-background: #ffffff;
+            --color-surface: #f9fafb;
+            --color-accent: #3b82f6;
+            --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2rem;
+            --space-xl: 3rem;
+            --space-2xl: 4rem;
+            --radius: 0.5rem;
+            --radius-lg: 0.75rem;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            line-height: 1.6;
+            color: var(--color-text);
+            background: var(--color-background);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 600px;
+            padding: var(--space-xl);
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: var(--space-md);
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--space-xl);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-sm) var(--space-lg);
+            background: white;
+            color: var(--color-text);
+            text-decoration: none;
+            border-radius: var(--radius);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-cta:hover {
+            background: var(--color-accent);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+        }
+
+        .section {
+            margin: var(--space-2xl) 0;
+        }
+
+        .section-header {
+            margin-bottom: var(--space-xl);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: var(--space-sm);
+            color: var(--color-text);
+        }
+
+        .section-description {
+            font-size: 1.125rem;
+            color: var(--color-text-light);
+            max-width: 600px;
+        }
+
+        /* Example Cards */
+        .example-grid {
+            display: grid;
+            gap: var(--space-xl);
+            margin: var(--space-xl) 0;
+        }
+
+        .example-card {
+            background: var(--color-background);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .example-card:hover {
+            border-color: var(--color-accent);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .example-header {
+            padding: var(--space-lg);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .example-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+            color: var(--color-text);
+        }
+
+        .example-description {
+            color: var(--color-text-light);
+            font-size: 0.95rem;
+        }
+
+        .example-preview {
+            position: relative;
+            min-height: 200px;
+            background: var(--color-surface);
+        }
+
+        .example-code {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: var(--space-lg);
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+
+        .example-code pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        /* Code Syntax Highlighting */
+        .code-tag { color: #569cd6; }
+        .code-attr { color: #9cdcfe; }
+        .code-value { color: #ce9178; }
+        .code-comment { color: #6a9955; }
+
+        /* Wave Examples */
+        .wave-demo {
+            position: relative;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .wave-demo-content {
+            text-align: center;
+            color: white;
+            z-index: 2;
+            position: relative;
+        }
+
+        .wave-demo h3 {
+            font-size: 1.5rem;
+            margin-bottom: var(--space-sm);
+            font-weight: 600;
+        }
+
+        .wave-demo p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        /* Properties Table */
+        .properties-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-lg) 0;
+            background: var(--color-background);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .properties-table th {
+            background: var(--color-surface);
+            padding: var(--space-md);
+            text-align: left;
+            font-weight: 600;
+            color: var(--color-text);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .properties-table td {
+            padding: var(--space-md);
+            border-bottom: 1px solid var(--color-border);
+            vertical-align: top;
+        }
+
+        .properties-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .property-name {
+            font-family: var(--font-mono);
+            background: var(--color-surface);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            color: var(--color-accent);
+        }
+
+        .property-description {
+            color: var(--color-text-light);
+            font-size: 0.95rem;
+        }
+
+        /* Installation Section */
+        .installation {
+            background: var(--color-surface);
+            padding: var(--space-xl);
+            border-radius: var(--radius-lg);
+            margin: var(--space-xl) 0;
+        }
+
+        .installation-code {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: var(--space-lg);
+            border-radius: var(--radius);
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            margin: var(--space-md) 0;
+            overflow-x: auto;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--color-text);
+            color: white;
+            padding: var(--space-2xl) 0;
+            margin-top: var(--space-2xl);
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer p {
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 var(--space-md);
+            }
+            
+            .hero {
+                min-height: 50vh;
+            }
+            
+            .example-grid {
+                gap: var(--space-lg);
+            }
+            
+            .properties-table {
+                font-size: 0.875rem;
+            }
+            
+            .properties-table th,
+            .properties-table td {
+                padding: var(--space-sm);
+            }
+        }
+
+        /* Subtle animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .example-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .example-card:nth-child(2) { animation-delay: 0.1s; }
+        .example-card:nth-child(3) { animation-delay: 0.2s; }
+        .example-card:nth-child(4) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <!-- Hero Section with Waves -->
+    <section class="hero">
+      <div class="hero-content">
+          <h1>Animated Waves</h1>
+          <p>Beautiful, customizable animated wave components for modern web interfaces. Clean, performant, and easy to integrate.</p>
+          <a href="#examples" class="hero-cta">View Examples ↓</a>
+      </div>
+
+      <animated-waves 
+        wave-color="rgba(255,255,255,1)" 
+        wave-height="150px"
+        speed="0.6"
+        wave-count="5"
+        opacity-range="0.3,0.8"
+        animation-style="gentle"
+        style="position: absolute; bottom: 0; left: 0; right: 0;"
+      />
+    </section>
+
+
+    <div class="container">
+        <!-- Installation -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Installation</h2>
+                <p class="section-description">Add animated waves to your project with a single script tag.</p>
+            </div>
+            
+            <div class="installation">
+                <h3 style="margin-bottom: var(--space-sm); font-weight: 600;">CDN Import</h3>
+                <div class="installation-code">
+&lt;script src="https://creamcitycoding.com/cdn/aw.js"&gt;&lt;/script&gt;
+                </div>
+            </div>
+        </section>
+
+        <!-- Examples -->
+        <section class="section" id="examples">
+            <div class="section-header">
+                <h2 class="section-title">Examples</h2>
+                <p class="section-description">See animated waves in action with different configurations and use cases.</p>
+            </div>
+
+            <div class="example-grid">
+                <!-- Basic Usage -->
+                <div class="example-card">
+                    <div class="example-header">
+                        <h3 class="example-title">Basic Usage</h3>
+                        <p class="example-description">Simple top waves with default settings</p>
+                    </div>
+                    <div class="example-preview">
+                        <animated-waves position="top" speed="0.6"></animated-waves>
+                    </div>
+                    <div class="example-code">
+<pre>&lt;<span class="code-tag">animated-waves</span> <span class="code-attr">position</span>=<span class="code-value">"top"</span> <span class="code-attr">speed</span>=<span class="code-value">"0.6"</span>&gt;&lt;/<span class="code-tag">animated-waves</span>&gt;</pre>
+                    </div>
+                </div>
+
+                <!-- Framed Content -->
+                <div class="example-card">
+                    <div class="example-header">
+                        <h3 class="example-title">Framed Content</h3>
+                        <p class="example-description">Content beautifully framed by waves above and below</p>
+                    </div>
+                    <div class="example-preview">
+                      <animated-waves 
+                        position="both" 
+                        wave-color="#e74c3c" 
+                        wave-height="100px"
+                        content-padding="50px"
+                        content-background-color="#e74c3c"
+                      >
+                            <div style="text-align: center; color: #1e40af;">
+                                <h3 style="margin: 0 0 0.5rem 0; font-size: 1.25rem;">Framed Content</h3>
+                                <p style="margin: 0; opacity: 0.8;">Your content goes here</p>
+                            </div>
+                        </animated-waves>
+                    </div>
+                    <div class="example-code">
+<pre>&lt;<span class="code-tag">animated-waves</span> 
+    <span class="code-attr">position</span>=<span class="code-value">"both"</span> 
+    <span class="code-attr">wave-color</span>=<span class="code-value">"rgba(59, 130, 246, 0.4)"</span> 
+    <span class="code-attr">wave-height</span>=<span class="code-value">"100px"</span>
+    <span class="code-attr">content-padding</span>=<span class="code-value">"40px"</span>
+    <span class="code-attr">content-background-color</span>=<span class="code-value">"rgba(59, 130, 246, 0.1)"</span>
+    <span class="code-attr">speed</span>=<span class="code-value">"0.7"</span>&gt;
+    &lt;<span class="code-tag">div</span>&gt;Your content here&lt;/<span class="code-tag">div</span>&gt;
+&lt;/<span class="code-tag">animated-waves</span>&gt;</pre>
+                    </div>
+                </div>
+
+                <!-- Bottom Waves -->
+                <div class="example-card">
+                    <div class="example-header">
+                        <h3 class="example-title">Bottom Waves</h3>
+                        <p class="example-description">Bottom waves with custom styling</p>
+                    </div>
+                    <div class="example-preview">
+                        <div style="background: linear-gradient(45deg, #10b981, #059669); height: 200px; display: flex; align-items: center; justify-content: center; color: white; position: relative;">
+                            <div style="text-align: center; z-index: 2; position: relative;">
+                                <h3 style="margin: 0 0 0.5rem 0; font-size: 1.25rem;">Content Above</h3>
+                                <p style="margin: 0; opacity: 0.9;">Waves flow below</p>
+                            </div>
+                            <animated-waves 
+                                position="bottom" 
+                                wave-color="rgba(255, 255, 255, 0.3)" 
+                                wave-height="80px"
+                                speed="0.8"
+                                animation-style="gentle">
+                            </animated-waves>
+                        </div>
+                    </div>
+                    <div class="example-code">
+<pre>&lt;<span class="code-tag">animated-waves</span> 
+    <span class="code-attr">position</span>=<span class="code-value">"bottom"</span> 
+    <span class="code-attr">wave-color</span>=<span class="code-value">"rgba(255, 255, 255, 0.3)"</span> 
+    <span class="code-attr">wave-height</span>=<span class="code-value">"80px"</span>
+    <span class="code-attr">speed</span>=<span class="code-value">"0.8"</span>
+    <span class="code-attr">animation-style</span>=<span class="code-value">"gentle"</span>&gt;
+&lt;/<span class="code-tag">animated-waves</span>&gt;</pre>
+                    </div>
+                </div>
+
+                <!-- Advanced Configuration -->
+                <div class="example-card">
+                    <div class="example-header">
+                        <h3 class="example-title">Advanced Configuration</h3>
+                        <p class="example-description">Multiple waves with custom opacity and animation style</p>
+                    </div>
+                    <div class="example-preview">
+                        <animated-waves 
+                            position="both" 
+                            wave-color="rgba(168, 85, 247, 0.4)" 
+                            wave-count="6"
+                            wave-height="120px"
+                            speed="0.5"
+                            opacity-range="0.2,0.8"
+                            animation-style="bouncy"
+                            content-padding="50px"
+                            content-background-color="rgba(168, 85, 247, 0.1)">
+                            <div style="text-align: center; color: #7c3aed;">
+                                <h3 style="margin: 0 0 0.5rem 0; font-size: 1.25rem;">Advanced Waves</h3>
+                                <p style="margin: 0; opacity: 0.8;">Multiple layers with custom settings</p>
+                            </div>
+                        </animated-waves>
+                    </div>
+                    <div class="example-code">
+<pre>&lt;<span class="code-tag">animated-waves</span> 
+    <span class="code-attr">position</span>=<span class="code-value">"both"</span> 
+    <span class="code-attr">wave-color</span>=<span class="code-value">"rgba(168, 85, 247, 0.4)"</span> 
+    <span class="code-attr">wave-count</span>=<span class="code-value">"6"</span>
+    <span class="code-attr">wave-height</span>=<span class="code-value">"120px"</span>
+    <span class="code-attr">speed</span>=<span class="code-value">"0.5"</span>
+    <span class="code-attr">opacity-range</span>=<span class="code-value">"0.2,0.8"</span>
+    <span class="code-attr">animation-style</span>=<span class="code-value">"bouncy"</span>
+    <span class="code-attr">content-padding</span>=<span class="code-value">"50px"</span>
+    <span class="code-attr">content-background-color</span>=<span class="code-value">"rgba(168, 85, 247, 0.1)"</span>&gt;
+    &lt;<span class="code-tag">div</span>&gt;Your content here&lt;/<span class="code-tag">div</span>&gt;
+&lt;/<span class="code-tag">animated-waves</span>&gt;</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Properties Reference -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Properties Reference</h2>
+                <p class="section-description">Complete list of available properties and their configurations.</p>
+            </div>
+
+            <table class="properties-table">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="property-name">position</span></td>
+                        <td>string</td>
+                        <td>"top"</td>
+                        <td class="property-description">Controls wave placement: "top", "bottom", or "both"</td>
+                    </tr>
+                    <tr>
+                        <td><span class="property-name">wave-height</span></td>
+                        <td>string</td>
+                        <td>"100px"</td>
+                        <td class="property-description">Height of each wave section (only for "both" position)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="property-name">content-padding</span></td>
+                        <td>string</td>
+                        <td>"20px"</td>
+                        <td class="property-description">Padding around content area (only for "both" position)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="property-name">content-background-color</span></td>
+                        <td>string</td>
+                        <td>matches wave-color</td>
+                        <td class="property-description">Background color of content area (only for "both" position)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="property-name">wave-color</span></td>
+                        <td>string</td>
+                        <td>"#1A237E"</td>
+                        <td class="property-description">Color of the waves</td>
+                    </tr>
+                    <tr>
+                        <td><span class="property-name">background-color</span></td>
+                        <td>string</td>
+                        <td>"transparent"</td>
+                        <td class="property-description">Background color of the container</td>
+                    </tr>
+                    <tr>
+                        <td><span class="property-name">height</span></td>
+                        <td>string</td>
+                        <td>"15vh"</td>
+                        <td class="property-description">Height of the wave container (for "top"/"bottom" only)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="property-name">speed</span></td>
+                        <td>number</td>
+                        <td>1</td>
+                        <td class="property-description">Animation speed multiplier (higher = faster)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="property-name">opacity-range</span></td>
+                        <td>string</td>
+                        <td>"0.3,0.9"</td>
+                        <td class="property-description">Min,max opacity for waves (format: "min,max")</td>
+                    </tr>
+                    <tr>
+                        <td><span class="property-name">wave-count</span></td>
+                        <td>number</td>
+                        <td>4</td>
+                        <td class="property-description">Number of wave layers</td>
+                    </tr>
+                    <tr>
+                        <td><span class="property-name">animation-style</span></td>
+                        <td>string</td>
+                        <td>"smooth"</td>
+                        <td class="property-description">Animation easing: "smooth", "linear", "ease-in-out", "bouncy", "gentle"</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>Animated Waves — Beautiful, performant wave components for modern web interfaces</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://creamcitycoding.com/cdn/aw.js"></script>
+</body>
+</html>
