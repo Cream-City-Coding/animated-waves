@@ -17,8 +17,7 @@ class AnimatedWaves extends HTMLElement {
       'wave-height',
       'content-padding',
       'content-background-color',
-      'responsive',
-      'responsive-factor'
+      'responsive'
     ];
   }
 
@@ -78,34 +77,35 @@ class AnimatedWaves extends HTMLElement {
   }
 
   get responsive() {
-    return this.getAttribute('responsive') !== 'false'; // Default to true unless explicitly set to false
-  }
-
-  get responsiveFactor() {
-    return parseFloat(this.getAttribute('responsive-factor') || '1'); // Default to 1 (normal scaling)
+    const value = this.getAttribute('responsive') || 'auto';
+    return value; // 'auto', 'fixed', 'aggressive', or 'gentle'
   }
 
   getResponsiveWaveHeight() {
-    if (!this.responsive) {
+    if (this.responsive === 'fixed') {
       return this.waveHeight;
     }
     
     // Parse the base wave height to get a numeric value
     const baseHeight = parseFloat(this.waveHeight);
     const unit = this.waveHeight.replace(/[0-9.]/g, '');
-    const factor = this.responsiveFactor;
     
-    // Calculate responsive heights with the factor
-    // Factor 1.0 = normal scaling, 0.5 = more aggressive, 2.0 = less aggressive
-    const mobileScale = Math.max(0.7 / factor, 0.3); // Higher factor = less scaling down
-    const tabletScale = Math.max(0.85 / factor, 0.5); // Higher factor = less scaling down
-    
-    return {
-      base: this.waveHeight,
-      mobile: `${Math.max(baseHeight * mobileScale, 100)}${unit}`,
-      tablet: `${Math.max(baseHeight * tabletScale, 120)}${unit}`,
-      desktop: this.waveHeight
+    // Define scaling factors for different responsive modes
+    const scalingFactors = {
+      'aggressive': { min: 0.15, vwMultiplier: 0.075 }, // 15% of viewport width 
+      'default': { min: 0.20, vwMultiplier: 0.10 }, // 20% of viewport width 
+      'gentle': { min: 0.5, vwMultiplier: 0.25 }      // 25% of viewport width
     };
+    
+    const factor = scalingFactors[this.responsive as keyof typeof scalingFactors] || scalingFactors.default;
+    
+    // Use CSS clamp() for smooth scaling across all screen sizes
+    const minHeight = Math.max(baseHeight * factor.min, 30);
+    const vwHeight = factor.vwMultiplier * 100; // Convert to percentage of viewport
+    const maxHeight = this.waveHeight;
+    
+    // Use viewport width for responsive scaling
+    return `clamp(${minHeight}${unit}, ${vwHeight}vw, ${maxHeight})`;
   }
 
   getAnimationDurations() {
@@ -228,8 +228,8 @@ class AnimatedWaves extends HTMLElement {
     // For backwards compatibility, if position is 'top' or 'bottom', use full height
     const containerHeight = position === 'both' ? 'auto' : this.height;
     
-    // Get responsive wave heights
-    const responsiveHeights = this.getResponsiveWaveHeight();
+    // Get responsive wave height
+    const responsiveHeight = this.getResponsiveWaveHeight();
 
     this.shadowRoot!.innerHTML = `
       <style>
@@ -250,10 +250,13 @@ class AnimatedWaves extends HTMLElement {
 
         .wave-section {
           width: 100%;
-          height: ${typeof responsiveHeights === 'string' ? responsiveHeights : responsiveHeights.desktop};
+          height: ${responsiveHeight};
           overflow: hidden;
           flex-shrink: 0;
           transition: height 0.3s ease;
+          position: absolute;
+          bottom: 0;
+          left: 0;
         }
 
         .content-section {
@@ -299,36 +302,18 @@ class AnimatedWaves extends HTMLElement {
           backface-visibility: hidden;
         }
 
-        ${this.responsive && typeof responsiveHeights === 'object' ? `
-          /* Mobile styles */
-          @media (max-width: 768px) {
-            .wave-section {
-              height: ${responsiveHeights.mobile};
-            }
-            
-            .content-section {
-              padding: ${this.contentPadding.replace(/(\d+)/g, (match) => Math.max(parseInt(match) * 0.7, 10).toString())};
-            }
+        /* Responsive content padding */
+        @media (max-width: 768px) {
+          .content-section {
+            padding: ${this.contentPadding.replace(/(\d+)/g, (match) => Math.max(parseInt(match) * 0.7, 10).toString())};
           }
-          
-          /* Tablet styles */
-          @media (min-width: 769px) and (max-width: 1024px) {
-            .wave-section {
-              height: ${responsiveHeights.tablet};
-            }
+        }
+        
+        @media (max-width: 480px) {
+          .content-section {
+            padding: ${this.contentPadding.replace(/(\d+)/g, (match) => Math.max(parseInt(match) * 0.5, 8).toString())};
           }
-          
-          /* Small mobile styles */
-          @media (max-width: 480px) {
-            .wave-section {
-              height: ${responsiveHeights.mobile};
-            }
-            
-            .content-section {
-              padding: ${this.contentPadding.replace(/(\d+)/g, (match) => Math.max(parseInt(match) * 0.5, 8).toString())};
-            }
-          }
-        ` : ''}
+        }
 
         ${topWaves.styles}
         ${bottomWaves.styles}
